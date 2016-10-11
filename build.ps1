@@ -1,15 +1,20 @@
 ﻿$msbuild = "C:\Program Files (x86)\MSBuild\14.0\Bin\MSBuild.exe"
 
-#$solution = "C:\work\svn\trunk\WINDEV4\AllApp\AllApp.sln"
-$solution = "C:\Users\Shane\Documents\hopatech\CodeAnalysisTest\CodeAnalysisTest.sln"
-$configuration = "Release"
-$parameters = "/p:Configuration=" + $configuration
-
-& $msbuild $parameters $solution "/m"
-if($LastExitCode -ne 0)
+function BuildSolution ($solution, $configuration)
 {
-    echo "Failure"
-    exit
+    & "$msbuild" /p:Configuration=$configuration "$solution" /m
+    if($LastExitCode -ne 0)
+    {
+        Write-Host "Failed to build $solution ($configuration)" -ForegroundColor Red
+        exit
+    }
+
+    Write-Host "Build succeeded!" -ForegroundColor Blue
 }
 
-echo "Success"
+#BuildSolution -solution "C:\Users\Shane\Documents\hopatech\CodeAnalysisTest\CodeAnalysisTest.sln" -configuration "Release"
+
+BuildSolution -solution "C:\work\svn\trunk\WINDEV4\AllApp\AllApp.sln" -configuration "Release"
+BuildSolution -solution "C:\work\svn\trunk\WINDEV4\AllApp\AllApp.sln" -configuration "Release"
+
+
